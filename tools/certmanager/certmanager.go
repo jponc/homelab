@@ -15,5 +15,23 @@ func CreateCertManager(ctx *pulumi.Context) error {
 		return err
 	}
 
+	// Add letsencrypt clusterissuer
+	_, err = yaml.NewConfigFile(ctx, "letsencrypt-clusterissuer", &yaml.ConfigFileArgs{
+		File:      "certmanager/letsencrypt-clusterissuer.yaml",
+		SkipAwait: false,
+	})
+	if err != nil {
+		return err
+	}
+
+	// Add jponc.dev wildcard cert
+	_, err = yaml.NewConfigFile(ctx, "jponc-dev-certificate", &yaml.ConfigFileArgs{
+		File:      "certmanager/jponc-dev-certificate.yaml",
+		SkipAwait: false,
+	})
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

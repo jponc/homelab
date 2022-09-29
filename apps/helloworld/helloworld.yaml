@@ -2,9 +2,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: helloworld
+  name: helloworld-ingress
   annotations:
     kubernetes.io/ingress.class: "traefik"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
   - http:
@@ -13,15 +14,19 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: helloworld
+            name: helloworld-svc
             port:
               number: 80
+  tls:
+  - hosts:
+    - helloworld.jponc.dev
+    secretName: jponc-dev-tls
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: helloworld
+  name: helloworld-svc
 spec:
   ports:
     - port: 80
@@ -38,7 +43,7 @@ spec:
   selector:
     matchLabels:
       app: helloworld
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
