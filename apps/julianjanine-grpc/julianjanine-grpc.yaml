@@ -1,0 +1,78 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: julianjanine-jponc-dev-crt
+spec:
+  secretName: julianjanine-jponc-dev-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: "julianjanine.jponc.dev"
+  dnsNames:
+  - "julianjanine.jponc.dev"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+  name: julianjanine-grpc-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: julianjanine.jponc.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: julianjanine-grpc
+            port:
+              number: 80
+  tls:
+  - secretName: julianjanine-jponc-dev-tls
+    hosts:
+      - julianjanine.jponc.dev
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: julianjanine-grpc
+  name: julianjanine-grpc
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 9001
+  selector:
+    app: julianjanine-grpc
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: julianjanine-grpc
+  name: julianjanine-grpc
+spec:
+  selector:
+    matchLabels:
+      app: julianjanine-grpc
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: julianjanine-grpc
+    spec:
+      containers:
+      - name: julianjanine-grpc
+        image: julianponce/julianjanine-grpc:d1b2526
+        ports:
+          - containerPort: 9001
+        env:
+          - name: PORT
+            value: "9001"

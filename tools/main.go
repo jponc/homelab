@@ -1,7 +1,9 @@
 package main
 
 import (
+	"homelab/tools/appsnamespace"
 	"homelab/tools/certmanager"
+	"homelab/tools/ingressnginx"
 	"homelab/tools/postgres"
 	"homelab/tools/route53ddns"
 
@@ -21,6 +23,16 @@ func main() {
 		}
 
 		err = postgres.CreatePostgresDB(ctx)
+		if err != nil {
+			return err
+		}
+
+		err = appsnamespace.CreateAppsNamespace(ctx)
+		if err != nil {
+			return err
+		}
+
+		err = ingressnginx.CreateIngressNginx(ctx)
 		if err != nil {
 			return err
 		}

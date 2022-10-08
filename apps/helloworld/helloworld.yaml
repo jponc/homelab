@@ -1,14 +1,27 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: helloworld-jponc-dev-crt
+spec:
+  secretName: helloworld-jponc-dev-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: "helloworld.jponc.dev"
+  dnsNames:
+  - "helloworld.jponc.dev"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: helloworld-ingress
   annotations:
-    kubernetes.io/ingress.class: "traefik"
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
+  ingressClassName: nginx
   rules:
-  - http:
+  - host: helloworld.jponc.dev
+    http:
       paths:
       - path: /
         pathType: Prefix
@@ -19,8 +32,8 @@ spec:
               number: 80
   tls:
   - hosts:
-    - helloworld.jponc.dev
-    secretName: jponc-dev-tls
+      - helloworld.jponc.dev
+    secretName: helloworld-jponc-dev-tls
 
 ---
 apiVersion: v1
