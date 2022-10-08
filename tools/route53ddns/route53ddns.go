@@ -6,7 +6,6 @@ import (
 )
 
 func CreateRoute53DDNS(ctx *pulumi.Context) error {
-	// Create CertManager from Yaml
 	_, err := yaml.NewConfigFile(ctx, "route53ddns-cronjob", &yaml.ConfigFileArgs{
 		File:      "route53ddns/cronjob.yaml",
 		SkipAwait: false,

@@ -2,6 +2,7 @@ package main
 
 import (
 	"homelab/tools/certmanager"
+	"homelab/tools/postgres"
 	"homelab/tools/route53ddns"
 
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
@@ -15,6 +16,11 @@ func main() {
 		}
 
 		err = route53ddns.CreateRoute53DDNS(ctx)
+		if err != nil {
+			return err
+		}
+
+		err = postgres.CreatePostgresDB(ctx)
 		if err != nil {
 			return err
 		}
