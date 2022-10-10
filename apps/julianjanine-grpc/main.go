@@ -15,6 +15,14 @@ func main() {
 			return err
 		}
 
+		_, err = yaml.NewConfigFile(ctx, "secret", &yaml.ConfigFileArgs{
+			File:      "secret.yaml",
+			SkipAwait: false,
+		})
+		if err != nil {
+			return err
+		}
+
 		return nil
 	})
 }
