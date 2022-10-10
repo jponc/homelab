@@ -11,30 +11,21 @@ spec:
   dnsNames:
   - "helloworld.jponc.dev"
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
 metadata:
   name: helloworld-ingress
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
-  ingressClassName: nginx
-  rules:
-  - host: helloworld.jponc.dev
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: helloworld-svc
-            port:
-              number: 80
-  tls:
-  - hosts:
-      - helloworld.jponc.dev
-    secretName: helloworld-jponc-dev-tls
-
+  virtualhost:
+    fqdn: helloworld.jponc.dev
+    tls:
+      secretName: helloworld-jponc-dev-tls
+  routes:
+  - conditions:
+    - prefix: /
+    services:
+    - name: helloworld-svc
+      port: 80
 ---
 apiVersion: v1
 kind: Service
