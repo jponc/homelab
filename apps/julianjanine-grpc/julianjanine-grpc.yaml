@@ -79,7 +79,7 @@ spec:
     spec:
       containers:
       - name: julianjanine-grpc
-        image: julianponce/julianjanine-grpc:41a1a13
+        image: julianponce/julianjanine-grpc:40e7dc9
         ports:
           - containerPort: 9001
         env:
