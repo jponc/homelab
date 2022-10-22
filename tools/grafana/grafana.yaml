@@ -1,0 +1,119 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: monitoring
+data:
+  prometheus.yaml: |-
+    {
+        "apiVersion": 1,
+        "datasources": [
+            {
+               "access":"proxy",
+                "editable": true,
+                "name": "prometheus",
+                "orgId": 1,
+                "type": "prometheus",
+                "url": "http://prometheus-svc.monitoring.svc:9090",
+                "version": 1
+            }
+        ]
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      name: grafana
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:latest
+        ports:
+        - name: grafana
+          containerPort: 3000
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+          requests: 
+            memory: 500M
+            cpu: "500m"
+        volumeMounts:
+          - mountPath: /var/lib/grafana
+            name: grafana-storage
+          - mountPath: /etc/grafana/provisioning/datasources
+            name: grafana-datasources
+            readOnly: false
+      volumes:
+        - name: grafana-storage
+          emptyDir: {}
+        - name: grafana-datasources
+          configMap:
+              defaultMode: 420
+              name: grafana-datasources
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: monitoring
+  annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port:   '3000'
+spec:
+  selector:
+    app: grafana
+  ports:
+    - port: 3000
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana-jponc-dev-crt
+spec:
+  secretName: grafana-jponc-dev-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: "grafana.jponc.dev"
+  dnsNames:
+  - "grafana.jponc.dev"
+---
+apiVersion: projectcontour.io/v1
+kind: TLSCertificateDelegation
+metadata:
+  name: grafana-jponc-dev
+  namespace: default
+spec:
+  delegations:
+    - secretName: grafana-jponc-dev-tls
+      targetNamespaces:
+      - monitoring
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: grafana-ingress
+  namespace: monitoring
+spec:
+  virtualhost:
+    fqdn: grafana.jponc.dev
+    tls:
+      secretName: default/grafana-jponc-dev-tls
+  routes:
+  - conditions:
+    - prefix: /
+    services:
+    - name: grafana
+      port: 3000
