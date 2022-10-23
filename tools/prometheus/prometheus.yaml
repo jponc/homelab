@@ -196,7 +196,7 @@ spec:
         - name: prometheus
           image: prom/prometheus
           args:
-            - "--storage.tsdb.retention.time=12h"
+            - "--storage.tsdb.retention.time=48h"
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"
           ports:
@@ -230,6 +230,7 @@ metadata:
       prometheus.io/scrape: 'true'
       prometheus.io/port:   '9090'
 spec:
+  type: NodePort
   selector:
     app: prometheus-server
   ports:

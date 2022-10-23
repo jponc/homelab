@@ -20,6 +20,38 @@ data:
         ]
     }
 ---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: grafana-volume
+  namespace: monitoring
+  labels:
+    type: local
+    app: grafana
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/data/grafana"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-volume-claim
+  namespace: monitoring
+  labels:
+    app: grafana
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,6 +71,9 @@ spec:
       containers:
       - name: grafana
         image: grafana/grafana:latest
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 0
         ports:
         - name: grafana
           containerPort: 3000
@@ -57,7 +92,8 @@ spec:
             readOnly: false
       volumes:
         - name: grafana-storage
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: grafana-volume-claim
         - name: grafana-datasources
           configMap:
               defaultMode: 420
