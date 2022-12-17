@@ -20,38 +20,6 @@ data:
         ]
     }
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: grafana-volume
-  namespace: monitoring
-  labels:
-    type: local
-    app: grafana
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 3Gi
-  accessModes:
-    - ReadWriteMany
-  hostPath:
-    path: "/data/grafana"
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: grafana-volume-claim
-  namespace: monitoring
-  labels:
-    app: grafana
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 3Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -86,14 +54,15 @@ spec:
             cpu: "500m"
         volumeMounts:
           - mountPath: /var/lib/grafana
-            name: grafana-storage
+            name: monitoring-pvc
+            subPath: grafana
           - mountPath: /etc/grafana/provisioning/datasources
             name: grafana-datasources
             readOnly: false
       volumes:
-        - name: grafana-storage
+        - name: monitoring-pvc
           persistentVolumeClaim:
-            claimName: grafana-volume-claim
+            claimName: monitoring-pvc
         - name: grafana-datasources
           configMap:
               defaultMode: 420
