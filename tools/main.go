@@ -28,7 +28,7 @@ func main() {
 			return err
 		}
 
-		err = postgres.CreatePostgresDB(ctx)
+		err = postgres.CreatePostgresDB(ctx, config)
 		if err != nil {
 			return err
 		}

@@ -8,4 +8,9 @@ type Config struct {
 	Route53DDNSAWSSecretAccessKeyBase64  pulumi.StringOutput
 	Route53DDNSRoute53DomainsBase64      pulumi.StringOutput
 	Route53DDNSRoute53HostedZoneIdBase64 pulumi.StringOutput
+
+	PostgresImage          string
+	PostgresDbBase64       pulumi.StringOutput
+	PostgresPasswordBase64 pulumi.StringOutput
+	PostgresUserBase64     pulumi.StringOutput
 }

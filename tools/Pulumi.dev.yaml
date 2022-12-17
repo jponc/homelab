@@ -2,6 +2,13 @@ config:
   aws:profile: jponc
   aws:region: ap-southeast-2
   kubernetes:context: homelab
+  tools:postgresImage: postgres:14.5
+  tools:postgresDbBase64:
+    secure: AAABABhKD+Gy78+rPJLKWjQuOPC1jCYlXCSXhMA9OhDh7HMIc3m/6g==
+  tools:postgresPasswordBase64:
+    secure: AAABAN1/hFo2wOf5by4wGX7pCtW7N5tJ64yNlzZBrHTCQIQpDwPU7FhA3f+fEcQ+IPKkXufxQHU=
+  tools:postgresUserBase64:
+    secure: AAABAEe92Az5wLO6WgWcI0zvAHLi4GA5M9wsRDq2wn9btxIBFT+IeZBntus=
   tools:route53ddnsAWSAccessKeyIdBase64:
     secure: AAABAERFQuPkhCCU12WtVGSrqNYR8C8Wa7VfmAnFb2hevm3CX0HIO8M9jVg06sq0JZ43aQye0FoBhkkP
   tools:route53ddnsAWSSecretAccessKeyBase64:

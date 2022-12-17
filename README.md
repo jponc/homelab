@@ -21,6 +21,22 @@ I've installed it manually via helmchart and disabled the use of host port as it
 helm install my-release bitnami/contour --namespace projectcontour --create-namespace --set envoy.useHostPort=false --kube-context=homelab
 ```
 
+# Longhorn for storage
+```
+kubectl create namespace longhorn-system --context homelab
+
+helm repo add longhorn https://charts.longhorn.io --kube-context=homelab
+helm repo update --kube-context=homelab
+helm install longhorn longhorn/longhorn --namespace longhorn-system --kube-context=homelab
+```
+
+Run this to all nodes
+
+```
+sudo apt install nfs-common
+```
+
+
 # Monitoring
 
 I'm currently using https://www.statuscake.com/ to send me notifications if my healthcheck endpoint is up/down
