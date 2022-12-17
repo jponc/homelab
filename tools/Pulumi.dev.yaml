@@ -1,4 +1,13 @@
 config:
-  aws:region: ap-southeast-2
   aws:profile: jponc
+  aws:region: ap-southeast-2
   kubernetes:context: homelab
+  tools:route53ddnsAWSAccessKeyIdBase64:
+    secure: AAABAERFQuPkhCCU12WtVGSrqNYR8C8Wa7VfmAnFb2hevm3CX0HIO8M9jVg06sq0JZ43aQye0FoBhkkP
+  tools:route53ddnsAWSSecretAccessKeyBase64:
+    secure: AAABAMgLseI/OvGJOWH6HbwFPS6NZhlHPxAg7AcLaTP6C63IZw3Iwz1C0xsBpw/ywc5VBYexlzU6O0dHw7I7uzV8zsSQ5WzeOLB0yA0xNx3eyDoxA6SAlQ==
+  tools:route53ddnsImage: julianponce/route53ddns:latest
+  tools:route53ddnsRoute53DomainsBase64:
+    secure: AAABAC0eDEMpAcl/ClvW0rzPs1wVeV6rpgilftWL1QqLjNurfSEpg5FM1R2WN9RyqfQ/PmJh3vupqQt7CNPd9jzsC05Ra4uPdgdj4usHNpVzQ+QqkW70cf3qkp05rwjUIDbUj0IsbgTdQ0srTK+9fX6ViQWkL83h56kHJ37m7xyGm24t
+  tools:route53ddnsRoute53HostedZoneIdBase64:
+    secure: AAABAA0TfdN95AkfV7L0KwDfQ61JMzbWF2NVUsg+CvRFm0Aw7ot7HD930tt24ny1st0VKg86ZgKRsU7v
