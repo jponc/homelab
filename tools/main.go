@@ -1,7 +1,6 @@
 package main
 
 import (
-	"homelab/tools/appsnamespace"
 	"homelab/tools/certmanager"
 	"homelab/tools/grafana"
 	"homelab/tools/kubestatemetrics"
@@ -29,11 +28,6 @@ func main() {
 		}
 
 		err = postgres.CreatePostgresDB(ctx, config)
-		if err != nil {
-			return err
-		}
-
-		err = appsnamespace.CreateAppsNamespace(ctx)
 		if err != nil {
 			return err
 		}
