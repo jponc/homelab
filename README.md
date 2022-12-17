@@ -40,3 +40,12 @@ sudo apt install nfs-common
 # Monitoring
 
 I'm currently using https://www.statuscake.com/ to send me notifications if my healthcheck endpoint is up/down
+
+# VPN Configuration for Ubuntu 22
+
+Followed this guide: https://www.youtube.com/watch?v=LnG7-IB6AsQ
+
+But I've used this for the script:
+```
+wget https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh -O ubuntu-22.04-lts-vpn-server.sh
+```
