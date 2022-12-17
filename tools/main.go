@@ -2,11 +2,8 @@ package main
 
 import (
 	"homelab/tools/certmanager"
-	"homelab/tools/grafana"
-	"homelab/tools/kubestatemetrics"
+	"homelab/tools/monitoring"
 	"homelab/tools/postgres"
-	"homelab/tools/prometheus"
-	"homelab/tools/pvcs"
 	"homelab/tools/route53ddns"
 
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
@@ -28,27 +25,12 @@ func main() {
 			return err
 		}
 
-		_, monitoringPVC, err := pvcs.CreatePVCs(ctx)
-		if err != nil {
-			return err
-		}
-
 		err = postgres.CreatePostgresDB(ctx, config)
 		if err != nil {
 			return err
 		}
 
-		err = prometheus.CreatePrometheus(ctx, monitoringPVC)
-		if err != nil {
-			return err
-		}
-
-		err = grafana.CreateGrafana(ctx, monitoringPVC)
-		if err != nil {
-			return err
-		}
-
-		err = kubestatemetrics.CreateKubeStateMetrics(ctx)
+		err = monitoring.CreateMonitoring(ctx)
 		if err != nil {
 			return err
 		}
