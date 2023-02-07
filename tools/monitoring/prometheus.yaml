@@ -207,7 +207,6 @@ spec:
             - name: prometheus-config-volume
               mountPath: /etc/prometheus/
             - name: monitoring-pvc
-              subPath: prometheus
               mountPath: /prometheus/
       volumes:
         - name: prometheus-config-volume
@@ -215,8 +214,7 @@ spec:
             defaultMode: 420
             name: prometheus-server-conf
         - name: monitoring-pvc
-          persistentVolumeClaim:
-            claimName: monitoring-pvc
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
