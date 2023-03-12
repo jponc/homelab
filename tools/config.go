@@ -18,5 +18,7 @@ func NewConfig(pulumiConfig *pulumiconfig.Config) *types.Config {
 		PostgresDbBase64:       pulumiConfig.RequireSecret("postgresDbBase64"),
 		PostgresPasswordBase64: pulumiConfig.RequireSecret("postgresPasswordBase64"),
 		PostgresUserBase64:     pulumiConfig.RequireSecret("postgresUserBase64"),
+
+		MetabaseImage: pulumiConfig.Require("metabaseImage"),
 	}
 }

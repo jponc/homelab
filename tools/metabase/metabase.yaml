@@ -1,0 +1,28 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: metabase-jponc-dev-crt
+spec:
+  secretName: metabase-jponc-dev-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: "metabase.jponc.dev"
+  dnsNames:
+  - "metabase.jponc.dev"
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: metabase
+spec:
+  virtualhost:
+    fqdn: metabase.jponc.dev
+    tls:
+      secretName: metabase-jponc-dev-tls
+  routes:
+    - conditions:
+      - prefix: /
+      services:
+        - name: metabase
+          port: 3000

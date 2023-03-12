@@ -2,6 +2,7 @@ config:
   aws:profile: jponc
   aws:region: ap-southeast-2
   kubernetes:context: homelab
+  tools:metabaseImage: metabase/metabase:latest
   tools:postgresImage: postgres:14.5
   tools:postgresDbBase64:
     secure: AAABABhKD+Gy78+rPJLKWjQuOPC1jCYlXCSXhMA9OhDh7HMIc3m/6g==

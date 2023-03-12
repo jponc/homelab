@@ -2,6 +2,7 @@ package main
 
 import (
 	"homelab/tools/certmanager"
+	"homelab/tools/metabase"
 	"homelab/tools/monitoring"
 	"homelab/tools/postgres"
 	"homelab/tools/route53ddns"
@@ -31,6 +32,11 @@ func main() {
 		}
 
 		err = monitoring.CreateMonitoring(ctx)
+		if err != nil {
+			return err
+		}
+
+		err = metabase.CreateMetabase(ctx, config)
 		if err != nil {
 			return err
 		}

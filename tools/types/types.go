@@ -13,4 +13,6 @@ type Config struct {
 	PostgresDbBase64       pulumi.StringOutput
 	PostgresPasswordBase64 pulumi.StringOutput
 	PostgresUserBase64     pulumi.StringOutput
+
+	MetabaseImage string
 }
